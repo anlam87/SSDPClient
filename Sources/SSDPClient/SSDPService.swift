@@ -39,7 +39,10 @@ public class SSDPService {
             - response: The discovery response.
     */
     private func parse(header: String, in response: String) -> String? {
-        if let range = response.range(of: "\(header): .*", options: .regularExpression) {
+        
+        let rangeOfString = response.range(of: "\(header): .*", options: .regularExpression) ?? response.range(of: "\(header.capitalized): .*", options: .regularExpression)
+        
+        if let range = rangeOfString {
             var value = String(response[range])
             value = value.replacingOccurrences(of: "\(header): ", with: "")
             return value
