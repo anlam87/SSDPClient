@@ -97,7 +97,7 @@ public class SSDPDiscovery {
     /// Force stop discovery closing the socket.
     private func forceStop() {
         if self.isDiscovering {
-            self.socket!.close()
+            self.socket?.close()
         }
         self.socket = nil
     }
