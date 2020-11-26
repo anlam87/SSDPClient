@@ -64,7 +64,7 @@ public class SSDPDiscovery {
             if let socket = self.socket {
                 var data = Data()
                 let (bytesRead, address) = try socket.readDatagram(into: &data)
-                if bytesRead > 0 {
+                if bytesRead > 0 && address != nil {
                     let response = String(data: data, encoding: .utf8)
                     let (remoteHost, _) = Socket.hostnameAndPort(from: address!)!
                     Log.debug("Received: \(response!) from \(remoteHost)")
