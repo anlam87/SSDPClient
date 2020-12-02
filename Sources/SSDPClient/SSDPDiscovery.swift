@@ -45,6 +45,9 @@ public class SSDPDiscovery {
             return self.socket != nil
         }
     }
+    
+    private let ssdpQueue = DispatchQueue(label: "ssdp.queue")
+    private var workItem: DispatchWorkItem?
 
     // MARK: Initialisation
 
@@ -81,21 +84,23 @@ public class SSDPDiscovery {
 
     /// Read responses with timeout.
     private func readResponses(forDuration duration: TimeInterval) {
-        let queue = DispatchQueue.global()
 
-        queue.async() {
+        ssdpQueue.async() {
             while self.isDiscovering {
                 self.readResponses()
             }
         }
-
-        queue.asyncAfter(deadline: .now() + duration) { [unowned self] in
+        workItem = DispatchWorkItem { // Set the work item with the block you want to execute
             self.stop()
         }
+        
+        ssdpQueue.asyncAfter(
+            queue.asyncAfter(deadline: .now() + duration, execute:workItem)
     }
 
     /// Force stop discovery closing the socket.
     private func forceStop() {
+        workItem?.cancel()
         if self.isDiscovering {
             self.socket?.close()
         }
