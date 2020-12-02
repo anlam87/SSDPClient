@@ -93,9 +93,7 @@ public class SSDPDiscovery {
         workItem = DispatchWorkItem { // Set the work item with the block you want to execute
             self.stop()
         }
-        
-        ssdpQueue.asyncAfter(
-            queue.asyncAfter(deadline: .now() + duration, execute:workItem)
+        ssdpQueue.asyncAfter(deadline: .now() + duration, execute:workItem)
     }
 
     /// Force stop discovery closing the socket.
